@@ -82,8 +82,8 @@ jobs:
    - task: Xcode@5
      inputs:
       actions: 'build'
-      xcWorkspacePath: 'ios/*.xcodeproj/project.xcworkspace'
+      xcWorkspacePath: 'web/ReactNativeBingo/ios/*.xcodeproj/project.xcworkspace'
       packageApp: true
       archivePath: 'build/'
       destinationPlatformOption: 'iOS'
-      workingDirectory: 'web/ReactNativeBingo'
+      workingDirectory: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj'
