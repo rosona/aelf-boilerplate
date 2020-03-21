@@ -82,6 +82,7 @@ jobs:
    - task: Xcode@5
      inputs:
        actions: 'build'
+       sdk: 'iphoneos'
        configuration: 'Debug'
        xcWorkspacePath: 'web/ReactNativeBingo/ios/*.xcodeproj/project.xcworkspace'
        scheme: 'ReactNativeBingo'
