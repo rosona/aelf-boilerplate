@@ -1,64 +1,64 @@
 jobs:
 
 # All tasks on Windows....
-- job: build_all_windows
-  displayName: Build all tasks (Windows)
-  pool:
-    vmImage: windows-latest
-  variables:
-    CI_TEST: true
-  steps:
-  - task: UseDotNet@2
-    displayName: 'Install .NET Core SDK'
-    inputs:
-      version: 3.1.100
+# - job: build_all_windows
+#   displayName: Build all tasks (Windows)
+#   pool:
+#     vmImage: windows-latest
+#   variables:
+#     CI_TEST: true
+#   steps:
+#   - task: UseDotNet@2
+#     displayName: 'Install .NET Core SDK'
+#     inputs:
+#       version: 3.1.100
 
-  - task: BatchScript@1
-    displayName: 'Download AElf build tools'
-    inputs:
-      filename: 'chain/scripts/download_binary.bat'
-  - script: PowerShell.exe -file chain/scripts/install.ps1 
-    displayName: 'Install protobuf'
-  - script: choco install unzip
-    displayName: 'Install unzip'
-  - powershell: Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-  - script: PowerShell.exe -file build.ps1 -target=Run-Unit-Tests
-    displayName: 'Build and Test'
-# All tasks on Linux
-- job: build_all_linux
-  displayName: Build all tasks (Linux)
-  timeoutInMinutes: 120
-  pool:
-    vmImage: ubuntu-latest
-  steps:
-  - task: UseDotNet@2
-    displayName: 'Install .NET Core SDK'
-    inputs:
-      version: 3.1.100
-  - script: bash chain/scripts/download_binary.sh
-    displayName: 'Download AElf build tools'
-  - script: bash chain/scripts/install.sh
-    displayName: 'Install protobuf'
-  - script: bash build.sh -target=Run-Unit-Tests
-    displayName: 'Build and Test'
-# All tasks on macOS
-- job: build_all_darwin
-  displayName: Build all tasks (macOS)
-  pool:
-    vmImage: macos-latest
-  variables:
-    CI_TEST: true
-  steps:
-  - task: UseDotNet@2
-    displayName: 'Install .NET Core SDK'
-    inputs:
-      version: 3.1.100
-  - script: bash chain/scripts/download_binary.sh
-    displayName: 'Download AElf build tools'
-  - script: bash chain/scripts/install.sh
-    displayName: 'Install protobuf'
-  - script: bash build.sh -target=Run-Unit-Tests
-    displayName: 'Build and Test'
+#   - task: BatchScript@1
+#     displayName: 'Download AElf build tools'
+#     inputs:
+#       filename: 'chain/scripts/download_binary.bat'
+#   - script: PowerShell.exe -file chain/scripts/install.ps1 
+#     displayName: 'Install protobuf'
+#   - script: choco install unzip
+#     displayName: 'Install unzip'
+#   - powershell: Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+#   - script: PowerShell.exe -file build.ps1 -target=Run-Unit-Tests
+#     displayName: 'Build and Test'
+# # All tasks on Linux
+# - job: build_all_linux
+#   displayName: Build all tasks (Linux)
+#   timeoutInMinutes: 120
+#   pool:
+#     vmImage: ubuntu-latest
+#   steps:
+#   - task: UseDotNet@2
+#     displayName: 'Install .NET Core SDK'
+#     inputs:
+#       version: 3.1.100
+#   - script: bash chain/scripts/download_binary.sh
+#     displayName: 'Download AElf build tools'
+#   - script: bash chain/scripts/install.sh
+#     displayName: 'Install protobuf'
+#   - script: bash build.sh -target=Run-Unit-Tests
+#     displayName: 'Build and Test'
+# # All tasks on macOS
+# - job: build_all_darwin
+#   displayName: Build all tasks (macOS)
+#   pool:
+#     vmImage: macos-latest
+#   variables:
+#     CI_TEST: true
+#   steps:
+#   - task: UseDotNet@2
+#     displayName: 'Install .NET Core SDK'
+#     inputs:
+#       version: 3.1.100
+#   - script: bash chain/scripts/download_binary.sh
+#     displayName: 'Download AElf build tools'
+#   - script: bash chain/scripts/install.sh
+#     displayName: 'Install protobuf'
+#   - script: bash build.sh -target=Run-Unit-Tests
+#     displayName: 'Build and Test'
 
 - job: build_app
   displayName: Build app ios/android (macOS)
@@ -67,11 +67,15 @@ jobs:
   variables:
     CI_TEST: true
   steps:
-  - task: ReactNativePrepare@0
-    inputs:
-      platform: 'ios'
-      cwd: 'web/ReactNativeBingo/ios/ReactNativeBingo'
-  - task: ReactNativePrepare@0
-    inputs:
-      platform: 'android'
-      cwd: 'web/ReactNativeBingo/android/'
+   - task: UseNode@1
+     inputs:
+       checkLatest: true
+   - task: Npm@1
+     inputs:
+       command: 'install'
+       workingDir: 'web/ReactNativeBingo'
+   - task: ReactNativePrepare@0
+     inputs:
+       platform: 'ios'
+       xcodeProject: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj/project.pbxproj'
+       cwd: 'web/ReactNativeBingo'
