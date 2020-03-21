@@ -86,8 +86,9 @@ jobs:
        configuration: 'Debug'
        xcWorkspacePath: 'web/ReactNativeBingo/ios/*.xcodeproj/project.xcworkspace'
        scheme: 'ReactNativeBingo'
-       packageApp: false
+       packageApp: true
        destinationPlatformOption: 'iOS'
        destinationSimulators: 'iPhone 8'
        workingDirectory: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj'
-   - script: ls -l web/ReactNativeBingo/ios/dist/
+       archivePath: 'web/ReactNativeBingo/ios'
+   - script: ls -l web/ReactNativeBingo/ios/
