@@ -70,30 +70,21 @@ jobs:
    - task: UseNode@1
      inputs:
        checkLatest: true
-   - task: Npm@1
+   - task: Yarn@3
      inputs:
-       command: 'install'
-       workingDir: 'web/ReactNativeBingo'
+      projectDirectory: 'web/ReactNativeBingo'
    - task: ReactNativePrepare@0
      inputs:
        platform: 'ios'
        xcodeProject: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj/project.pbxproj'
        cwd: 'web/ReactNativeBingo'
-   - script: sudo gem install xcpretty
-   - script: npm install react-native-cli -g
-   - script: cd web/ReactNativeBingo && npm install 
-  #  - script: echo "" > web/ReactNativeBingo/ios/debug.xcconfig
-  #  - script: echo "" > web/ReactNativeBingo/ios/release.xcconfig
-  #  - script: cd web/ReactNativeBingo && npm run build:ios
    - task: Xcode@5
      inputs:
-       actions: 'clean build'
-       configuration: 'Release'
-       sdk: 'iphoneos'
+       actions: 'build'
+       configuration: 'Debug'
        xcWorkspacePath: 'web/ReactNativeBingo/ios/*.xcodeproj/project.xcworkspace'
        scheme: 'ReactNativeBingo'
        packageApp: false
        destinationPlatformOption: 'iOS'
-       destinationSimulators: 'iPhone 8'
        workingDirectory: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj'
    - script: ls -l web/ReactNativeBingo/ios/dist/
