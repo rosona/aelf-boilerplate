@@ -79,7 +79,10 @@ jobs:
        platform: 'ios'
        xcodeProject: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj/project.pbxproj'
        cwd: 'web/ReactNativeBingo'
-   - task: CmdLine@2
+   - task: ReactNativeBundle@0
      inputs:
-       script: 'tree'
-       workingDirectory: 'web/ReactNativeBingo/ios'
+        platform: 'ios'
+        entryFile: 'index.js'
+        assetsDest: 'app/assets/'
+        sourcemapOutput: 'output'
+        cwd: 'web/ReactNativeBingo'
