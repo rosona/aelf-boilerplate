@@ -88,5 +88,6 @@ jobs:
        scheme: 'ReactNativeBingo'
        packageApp: false
        destinationPlatformOption: 'iOS'
+       destinationSimulators: 'iPhone 8'
        workingDirectory: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj'
    - script: ls -l web/ReactNativeBingo/ios/dist/
