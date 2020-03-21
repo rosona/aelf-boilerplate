@@ -81,9 +81,12 @@ jobs:
        cwd: 'web/ReactNativeBingo'
    - task: Xcode@5
      inputs:
-      actions: 'build'
-      xcWorkspacePath: 'web/ReactNativeBingo/ios/*.xcodeproj/project.xcworkspace'
-      packageApp: true
-      archivePath: 'build/'
-      destinationPlatformOption: 'iOS'
-      workingDirectory: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj'
+       actions: 'clean build'
+       configuration: 'Release'
+       sdk: 'iphoneos'
+       xcWorkspacePath: 'web/ReactNativeBingo/ios/*.xcodeproj/project.xcworkspace'
+       scheme: 'ReactNativeBingo'
+       packageApp: false
+       destinationPlatformOption: 'iOS'
+       destinationSimulators: 'iPhone 8'
+       workingDirectory: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj'
