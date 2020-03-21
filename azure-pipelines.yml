@@ -79,7 +79,12 @@ jobs:
        platform: 'ios'
        xcodeProject: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj/project.pbxproj'
        cwd: 'web/ReactNativeBingo'
-   - script: cd web/ReactNativeBingo && npm install && node_modules/.bin/rn-nodeify --install 'crypto,buffer,react-native-randombytes,vm,stream,http,https,os,url,net,fs,react-native-screens' --hack && npx patch-package 
+   - script: sudo gem install xcpretty
+   - script: npm install react-native-cli -g
+   - script: cd web/ReactNativeBingo && npm install 
+  #  - script: echo "" > web/ReactNativeBingo/ios/debug.xcconfig
+  #  - script: echo "" > web/ReactNativeBingo/ios/release.xcconfig
+  #  - script: cd web/ReactNativeBingo && npm run build:ios
    - task: Xcode@5
      inputs:
        actions: 'clean build'
@@ -91,3 +96,4 @@ jobs:
        destinationPlatformOption: 'iOS'
        destinationSimulators: 'iPhone 8'
        workingDirectory: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj'
+   - script: ls -l web/ReactNativeBingo/ios/dist/
