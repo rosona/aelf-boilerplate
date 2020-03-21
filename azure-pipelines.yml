@@ -79,6 +79,11 @@ jobs:
        platform: 'ios'
        xcodeProject: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj/project.pbxproj'
        cwd: 'web/ReactNativeBingo'
+   - script: cd web/ReactNativeBingo && npm install && node_modules/.bin/rn-nodeify --install 'crypto,buffer,react-native-randombytes,vm,stream,http,https,os,url,net,fs,react-native-screens' --hack && npx patch-package 
+   - script: echo "" > web/ReactNativeBingo/ios/debug.xcconfig
+   - script: echo "" > web/ReactNativeBingo/ios/release.xcconfig
+   - script: git submodule update --init
+   - script: cd web/ReactNativeBingo && npm run build:ios
    - task: Xcode@5
      inputs:
        actions: 'clean build'
