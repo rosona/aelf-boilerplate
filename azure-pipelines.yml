@@ -70,9 +70,10 @@ jobs:
    - task: UseNode@1
      inputs:
        checkLatest: true
-   - task: Yarn@3
+   - task: Npm@1
      inputs:
-      projectDirectory: 'web/ReactNativeBingo'
+      command: 'install'
+      workingDir: 'web/ReactNativeBingo'
    - task: ReactNativePrepare@0
      inputs:
        platform: 'ios'
