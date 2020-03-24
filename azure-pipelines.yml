@@ -1,94 +1,62 @@
-jobs:
-
-# All tasks on Windows....
-# - job: build_all_windows
-#   displayName: Build all tasks (Windows)
-#   pool:
-#     vmImage: windows-latest
-#   variables:
-#     CI_TEST: true
-#   steps:
-#   - task: UseDotNet@2
-#     displayName: 'Install .NET Core SDK'
-#     inputs:
-#       version: 3.1.100
-
-#   - task: BatchScript@1
-#     displayName: 'Download AElf build tools'
-#     inputs:
-#       filename: 'chain/scripts/download_binary.bat'
-#   - script: PowerShell.exe -file chain/scripts/install.ps1 
-#     displayName: 'Install protobuf'
-#   - script: choco install unzip
-#     displayName: 'Install unzip'
-#   - powershell: Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-#   - script: PowerShell.exe -file build.ps1 -target=Run-Unit-Tests
-#     displayName: 'Build and Test'
-# # All tasks on Linux
-# - job: build_all_linux
-#   displayName: Build all tasks (Linux)
-#   timeoutInMinutes: 120
-#   pool:
-#     vmImage: ubuntu-latest
-#   steps:
-#   - task: UseDotNet@2
-#     displayName: 'Install .NET Core SDK'
-#     inputs:
-#       version: 3.1.100
-#   - script: bash chain/scripts/download_binary.sh
-#     displayName: 'Download AElf build tools'
-#   - script: bash chain/scripts/install.sh
-#     displayName: 'Install protobuf'
-#   - script: bash build.sh -target=Run-Unit-Tests
-#     displayName: 'Build and Test'
-# # All tasks on macOS
-# - job: build_all_darwin
-#   displayName: Build all tasks (macOS)
-#   pool:
-#     vmImage: macos-latest
-#   variables:
-#     CI_TEST: true
-#   steps:
-#   - task: UseDotNet@2
-#     displayName: 'Install .NET Core SDK'
-#     inputs:
-#       version: 3.1.100
-#   - script: bash chain/scripts/download_binary.sh
-#     displayName: 'Download AElf build tools'
-#   - script: bash chain/scripts/install.sh
-#     displayName: 'Install protobuf'
-#   - script: bash build.sh -target=Run-Unit-Tests
-#     displayName: 'Build and Test'
-
-- job: build_app
-  displayName: Build app ios/android (macOS)
-  pool:
-    vmImage: macos-latest
-  variables:
-    CI_TEST: true
-  steps:
+trigger:
+  tags:
+    include:
+    - v*
+  branches:
+    include:
+    - dev
+    - refs/tags/v*
+    exclude:
+    - refs/heads/*
+    - refs/remotes/*
+  
+jobs: 
+ - job: build_all_mac
+   displayName: Build all tasks (macos)
+   condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
+   pool:
+    vmImage: 'macos-latest'
+   steps:
    - task: UseNode@1
      inputs:
        checkLatest: true
    - task: Npm@1
      inputs:
-      command: 'install'
-      workingDir: 'web/ReactNativeBingo'
+       command: 'install'
+       workingDir: 'web/ReactNativeBingo'
+   - task: ReactNativePrepare@0
+     inputs:
+       platform: 'android'
+       reactGradle: 'web/ReactNativeBingo/android/app/build.gradle'
+       cwd: 'web/ReactNativeBingo'
    - task: ReactNativePrepare@0
      inputs:
        platform: 'ios'
        xcodeProject: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj/project.pbxproj'
        cwd: 'web/ReactNativeBingo'
-   - task: Xcode@5
+   - task: Gradle@2
+     displayName: 'build apk with Gradle' 
      inputs:
-       actions: 'build'
-       sdk: 'iphoneos'
-       configuration: 'Debug'
-       xcWorkspacePath: 'web/ReactNativeBingo/ios/*.xcodeproj/project.xcworkspace'
-       scheme: 'ReactNativeBingo'
-       packageApp: true
-       destinationPlatformOption: 'iOS'
-       destinationSimulators: 'iPhone 8'
-       workingDirectory: 'web/ReactNativeBingo/ios/ReactNativeBingo.xcodeproj'
-       archivePath: 'web/ReactNativeBingo/ios'
-   - script: ls -l web/ReactNativeBingo/ios/
+       gradleWrapperFile: 'web/ReactNativeBingo/android/gradlew'
+       workingDirectory: 'web/ReactNativeBingo/android/app'
+       tasks: 'assembleRelease'
+       publishJUnitResults: false
+       javaHomeOption: 'JDKVersion'
+       sonarQubeRunAnalysis: false
+     continueOnError: false
+   - task: GitHubReleasePublish@1
+     displayName: 'Publish'
+     inputs:
+       githubEndpoint: 'wudameinv (1)'
+       manuallySetRepository: true
+       githubOwner: 'wudameinv'
+       githubRepositoryName: 'aelf-boilerplate'
+       githubReleaseDraft: true
+       githubReleasePrerelease: true
+       githubIgnoreAssets: false
+       githubReleaseAsset: 'web/ReactNativeBingo/android/app/build/outputs/apk/release/app-release.apk'
+       githubReuseRelease: true
+       githubReuseDraftOnly: true
+       githubSkipDuplicatedAssets: false
+       githubEditRelease: true
+       githubDeleteEmptyTag: true
