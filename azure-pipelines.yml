@@ -44,19 +44,19 @@ jobs:
        javaHomeOption: 'JDKVersion'
        sonarQubeRunAnalysis: false
      continueOnError: false
-   - task: GitHubReleasePublish@1
-     displayName: 'Publish'
-     inputs:
-       githubEndpoint: 'wudameinv (1)'
-       manuallySetRepository: true
-       githubOwner: 'wudameinv'
-       githubRepositoryName: 'aelf-boilerplate'
-       githubReleaseDraft: true
-       githubReleasePrerelease: true
-       githubIgnoreAssets: false
-       githubReleaseAsset: 'web/ReactNativeBingo/android/app/build/outputs/apk/release/app-release.apk'
-       githubReuseRelease: true
-       githubReuseDraftOnly: true
-       githubSkipDuplicatedAssets: false
-       githubEditRelease: true
-       githubDeleteEmptyTag: true
+  #  - task: GitHubReleasePublish@1
+  #    displayName: 'Publish'
+  #    inputs:
+  #      githubEndpoint: 'wudameinv (1)'
+  #      manuallySetRepository: true
+  #      githubOwner: 'wudameinv'
+  #      githubRepositoryName: 'aelf-boilerplate'
+  #      githubReleaseDraft: true
+  #      githubReleasePrerelease: true
+  #      githubIgnoreAssets: false
+  #      githubReleaseAsset: 'web/ReactNativeBingo/android/app/build/outputs/apk/release/app-release.apk'
+  #      githubReuseRelease: true
+  #      githubReuseDraftOnly: true
+  #      githubSkipDuplicatedAssets: false
+  #      githubEditRelease: true
+  #      githubDeleteEmptyTag: true
