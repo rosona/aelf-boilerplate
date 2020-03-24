@@ -1,15 +1,9 @@
 trigger:
-  tags:
-    include:
-    - v*
   branches:
     include:
     - dev
-    - refs/tags/v*
-    exclude:
-    - refs/heads/*
-    - refs/remotes/*
-  
+    - refs/tags/*
+
 jobs: 
  - job: build_all_mac
    displayName: Build all tasks (macos)
